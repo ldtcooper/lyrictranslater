@@ -1,5 +1,6 @@
 # Use an official PyTorch image with CUDA for GPU support
-FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+# FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
 
 # Set environment variables to avoid interactive prompts during installs
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -16,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install Jupyter and Python dependencies
 RUN pip install --upgrade pip && \
-    pip install jupyterlab torch numpy soundfile
+    pip install jupyterlab torch numpy soundfile transformers accelerate sentencepiece
 
 # Clone Demucs repository
 RUN pip install -U demucs
@@ -24,6 +25,12 @@ RUN pip install -U demucs
 # Install Whisper
 # RUN pip install git+https://github.com/openai/whisper.git
 RUN pip install -U openai-whisper
+
+# Add the script for downloading models
+COPY download_models.py /app/download_models.py
+
+# Run the model download script
+RUN python /app/download_models.py
 
 # Set working directory
 WORKDIR /workspace
