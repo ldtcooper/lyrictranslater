@@ -1,0 +1,1 @@
+docker run --rm -it -p 8888:8888 -v /home/ldtcoop/projects/lyrictranslater --gpus all lyrictranslate
